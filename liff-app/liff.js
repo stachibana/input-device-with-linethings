@@ -274,7 +274,14 @@ function liffGetButtonStateCharacteristic(characteristic) {
                     const el = document.getElementById("click-count-03");
                     el.innerText = clickCount03;
                 }
-                
+                } else if(ar.length == 4) {
+                    clickCount02 = 0;
+                    clickCount03 = 0;
+                    const el = document.getElementById("click-count-02");
+                    el.innerText = clickCount02;
+                    const el2 = document.getElementById("click-count-03");
+                    el2.innerText = clickCount03;
+                }
             }
         });
     }).catch(error => {
