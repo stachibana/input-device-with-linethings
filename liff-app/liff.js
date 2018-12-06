@@ -249,7 +249,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const el = document.getElementById("click-count-02");
             el.innerText = e.target.value.buffer.length;
             const el2 = document.getElementById("click-count-03");
-            const ar = new Uint8Array(e.target.value.buffer.length);
+            const ar = new Uint8Array(e.target.value.buffer);
             el2.innerText = ar.length;
             
             if (val > 0) {
