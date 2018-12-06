@@ -246,6 +246,8 @@ function liffGetButtonStateCharacteristic(characteristic) {
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const val = (new Uint8Array(e.target.value.buffer))[0];
+            alert(e.target.value.buffer.length);
+            alert(new Uint8Array(e.target.value.buffer.length).length)
             if (val > 0) {
                 // press
                 uiToggleStateButton(true);
