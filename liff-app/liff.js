@@ -250,11 +250,11 @@ function liffGetButtonStateCharacteristic(characteristic) {
             
             //el.innerText = e.target.value.buffer.length;
             const ar = new Uint8Array(e.target.value.buffer);
-            const el = document.getElementById("click-count-02");
-            el.innerText = (new TextDecoder('utf-8')).decode(ar);
+            //const el = document.getElementById("click-count-02");
+            //el.innerText = (new TextDecoder('utf-8')).decode(ar);
                 
-            const el2 = document.getElementById("click-count-03");
-            el2.innerText = ar.length;
+            //const el2 = document.getElementById("click-count-03");
+            //el2.innerText = ar.length;
             
             if (val > 0) {
                 // press
@@ -268,6 +268,13 @@ function liffGetButtonStateCharacteristic(characteristic) {
                     clickCount02++;
                     const el = document.getElementById("click-count-02");
                     el.innerText = clickCount02;
+                } else if(ar.length == 3) {
+                    clickCount = 0;
+                    clickCount02 = 0;
+                    const el = document.getElementById("click-count");
+                    el.innerText = clickCount;
+                    const el2 = document.getElementById("click-count-02");
+                    el2.innerText = clickCount02;
                 }
                 
             }
