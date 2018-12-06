@@ -12,6 +12,7 @@ const PSDI_CHARACTERISTIC_UUID  = '26E2B12B-85F0-4F3F-9FDD-91D114270E6E';
 let ledState = false; // true: LED on, false: LED off
 let clickCount = 0;
 let clickCount02 = 0;
+let clickCount03 = 0;
 
 // -------------- //
 // On window load //
@@ -269,12 +270,9 @@ function liffGetButtonStateCharacteristic(characteristic) {
                     const el = document.getElementById("click-count-02");
                     el.innerText = clickCount02;
                 } else if(ar.length == 3) {
-                    clickCount = 0;
-                    clickCount02 = 0;
-                    const el = document.getElementById("click-count");
-                    el.innerText = clickCount;
-                    const el2 = document.getElementById("click-count-02");
-                    el2.innerText = clickCount02;
+                    clickCount03++;
+                    const el = document.getElementById("click-count-03");
+                    el.innerText = clickCount03;
                 }
                 
             }
