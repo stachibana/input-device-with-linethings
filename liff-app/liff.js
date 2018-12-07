@@ -273,7 +273,6 @@ function liffGetButtonStateCharacteristic(characteristic) {
                     clickCount03++;
                     const el = document.getElementById("click-count-03");
                     el.innerText = clickCount03;
-                }
                 } else if(ar.length == 4) {
                     clickCount02 = 0;
                     clickCount03 = 0;
