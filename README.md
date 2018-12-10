@@ -2,7 +2,7 @@
 
 Forked from [official starter repository](https://github.com/line/line-things-starter).
 
-==== COPY FROM ORIGINAL ====
+__==== COPY FROM ORIGINAL BELOW ====__
 
 # LINE Things Starter
 
