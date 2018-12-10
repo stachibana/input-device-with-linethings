@@ -70,11 +70,11 @@ void setup() {
   //attachInterrupt(BUTTON, buttonAction, CHANGE);
 
   // Added
-  pinMode(SWITCH1, INPUT);
+  pinMode(SWITCH1, INPUT_PULLUP);
   attachInterrupt(SWITCH1, switch1Action, CHANGE);
-  pinMode(SWITCH2, INPUT);
+  pinMode(SWITCH2, INPUT_PULLUP);
   attachInterrupt(SWITCH2, switch2Action, CHANGE);
-  pinMode(SWITCH3, INPUT);
+  pinMode(SWITCH3, INPUT_PULLUP);
   attachInterrupt(SWITCH3, switch3Action, CHANGE);
   
   BLEDevice::init("");
