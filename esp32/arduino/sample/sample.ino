@@ -7,7 +7,7 @@
 #define DEVICE_NAME "LINE Things Trial ESP32"
 
 // User service UUID: Change this to your generated service UUID
-#define USER_SERVICE_UUID "91E4E176-D0B9-464D-9FE4-52EE3E9F1552"
+#define USER_SERVICE_UUID "4875aa75-6b69-4faa-a59e-46f2f0f03757"
 // User service characteristics
 #define WRITE_CHARACTERISTIC_UUID "E9062E71-9E62-4BC6-B0D3-35CDCD9B027B"
 #define NOTIFY_CHARACTERISTIC_UUID "62FBD229-6EDD-4D1A-B554-5C4E1BB29169"
@@ -18,6 +18,11 @@
 
 #define BUTTON 0
 #define LED1 2
+// Added 3 switches
+#define SWITCH1 4
+#define SWITCH2 5
+#define SWITCH3 21
+
 
 BLEServer* thingsServer;
 BLESecurity *thingsSecurity;
@@ -31,6 +36,10 @@ bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
 volatile int btnAction = 0;
+// Added
+volatile int swc1Action = 0;
+volatile int swc2Action = 0;
+volatile int swc3Action = 0;
 
 class serverCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
@@ -53,11 +62,19 @@ class writeCallback: public BLECharacteristicCallbacks {
 
 void setup() {
   Serial.begin(115200);
-
+  
   pinMode(LED1, OUTPUT);
   pinMode(BUTTON, INPUT_PULLUP);
   attachInterrupt(BUTTON, buttonAction, CHANGE);
 
+  // Added
+  pinMode(SWITCH1, INPUT);
+  attachInterrupt(SWITCH1, switch1Action, CHANGE);
+  pinMode(SWITCH2, INPUT);
+  attachInterrupt(SWITCH2, switch2Action, CHANGE);
+  pinMode(SWITCH3, INPUT);
+  attachInterrupt(SWITCH3, switch3Action, CHANGE);
+  
   BLEDevice::init("");
   BLEDevice::setEncryptionLevel(ESP_BLE_SEC_ENCRYPT_NO_MITM);
 
@@ -74,14 +91,51 @@ void setup() {
 
 void loop() {
   uint8_t btnValue;
-
+  
   while (btnAction > 0 && deviceConnected) {
     btnValue = !digitalRead(BUTTON);
+    Serial.println(btnValue);
+    
     btnAction = 0;
     notifyCharacteristic->setValue(&btnValue, 1);
     notifyCharacteristic->notify();
     delay(20);
   }
+
+  // Added
+  uint8_t switch1Value;
+  while (swc1Action > 0 && deviceConnected) {
+    switch1Value = digitalRead(SWITCH1);
+    Serial.println(switch1Value);
+    
+    swc1Action = 0;
+    notifyCharacteristic->setValue(&switch1Value, 2);
+    notifyCharacteristic->notify();
+    delay(20);
+  }
+
+  uint8_t switch2Value;
+  while (swc2Action > 0 && deviceConnected) {
+    switch2Value = digitalRead(SWITCH2);
+    Serial.println(switch2Value);
+    
+    swc2Action = 0;
+    notifyCharacteristic->setValue(&switch2Value, 3);
+    notifyCharacteristic->notify();
+    delay(20);
+  }
+  
+  uint8_t switch3Value;
+  while (swc3Action > 0 && deviceConnected) {
+    switch3Value = digitalRead(SWITCH3);
+    Serial.println(switch3Value);
+    
+    swc3Action = 0;
+    notifyCharacteristic->setValue(&switch3Value, 4);
+    notifyCharacteristic->notify();
+    delay(20);
+  }
+  
   // Disconnection
   if (!deviceConnected && oldDeviceConnected) {
     delay(500); // Wait for BLE Stack to be ready
@@ -140,4 +194,17 @@ void startAdvertising(void) {
 
 void buttonAction() {
   btnAction++;
+}
+
+// Added
+void switch1Action() {
+  swc1Action++;
+}
+
+void switch2Action() {
+  swc2Action++;
+}
+
+void switch3Action() {
+  swc3Action++;
 }
