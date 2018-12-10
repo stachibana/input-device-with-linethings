@@ -1,6 +1,8 @@
 # Original input device with [LINE Things](https://developers.line.biz/ja/docs/line-things/)
 
-Forked from [official starter](https://github.com/line/line-things-starter).
+Forked from [official starter repository](https://github.com/line/line-things-starter).
+
+==== COPY FROM ORIGINAL ====
 
 # LINE Things Starter
 
