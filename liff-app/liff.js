@@ -9,10 +9,8 @@ const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Dev
 const PSDI_CHARACTERISTIC_UUID  = '26E2B12B-85F0-4F3F-9FDD-91D114270E6E';
 
 // UI settings
-let ledState = false; // true: LED on, false: LED off
-let clickCount = 0;
-let clickCount02 = 0;
-let clickCount03 = 0;
+//let ledState = false; // true: LED on, false: LED off
+//let clickCount = 0;
 
 // -------------- //
 // On window load //
@@ -26,12 +24,14 @@ window.onload = () => {
 // Handler functions //
 // ----------------- //
 
+/*
 function handlerToggleLed() {
     ledState = !ledState;
 
     uiToggleLedButton(ledState);
     liffToggleDeviceLedState(ledState);
 }
+
 
 // ------------ //
 // UI functions //
@@ -66,7 +66,7 @@ function uiToggleStateButton(pressed) {
         el.innerText = "Released";
     }
 }
-
+*/
 function uiToggleDeviceConnected(connected) {
     const elStatus = document.getElementById("status");
     const elControls = document.getElementById("controls");
@@ -167,8 +167,8 @@ function liffRequestDevice() {
 
 function liffConnectToDevice(device) {
     device.gatt.connect().then(() => {
-        document.getElementById("device-name").innerText = device.name;
-        document.getElementById("device-id").innerText = device.id;
+        //document.getElementById("device-name").innerText = device.name;
+        //document.getElementById("device-id").innerText = device.id;
 
         // Show status connected
         uiToggleDeviceConnected(true);
@@ -193,12 +193,13 @@ function liffConnectToDevice(device) {
             // Remove disconnect callback
             device.removeEventListener('gattserverdisconnected', disconnectCallback);
 
+            /*
             // Reset LED state
             ledState = false;
             // Reset UI elements
             uiToggleLedButton(false);
             uiToggleStateButton(false);
-
+            */
             // Try to reconnect
             initializeLiff();
         };
@@ -218,6 +219,7 @@ function liffGetUserService(service) {
     });
 
     // Toggle LED
+    /*
     service.getCharacteristic(LED_CHARACTERISTIC_UUID).then(characteristic => {
         window.ledCharacteristic = characteristic;
 
@@ -226,6 +228,7 @@ function liffGetUserService(service) {
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
+    */
 }
 
 function liffGetPSDIService(service) {
@@ -242,44 +245,91 @@ function liffGetPSDIService(service) {
     });
 }
 
+// Added to handle tactile switches
+let rowIndex = 0;
+let colIndex = 0;
+let fieldText = "";
+let isEditing = false;
+const rowText = "あかさたなはまやらわ"
+const colText = ["あいうえおぁぃぅぇぉ",
+                 "かきくけこがぎぐげご",
+                 "さしすせそざじずぜぞ",
+                 "たちつてとだぢづでど",
+                 "なにぬねの",
+                 "はひふへほばびぶべぼぱぴぷぺぽ",
+                 "まみむめも",
+                 "やゆよゃゅょ",
+                 "らりるれろ",
+                 "わをん"];
+
 function liffGetButtonStateCharacteristic(characteristic) {
     // Add notification hook for button state
     // (Get notified when button state changes)
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const val = (new Uint8Array(e.target.value.buffer))[0];
-            
-            //el.innerText = e.target.value.buffer.length;
             const ar = new Uint8Array(e.target.value.buffer);
-            //const el = document.getElementById("click-count-02");
-            //el.innerText = (new TextDecoder('utf-8')).decode(ar);
-                
-            //const el2 = document.getElementById("click-count-03");
-            //el2.innerText = ar.length;
-            
+
             if (val > 0) {
                 // press
                 uiToggleStateButton(true);
             } else {
-                // release
-                if(ar.length == 1) {
-                    uiToggleStateButton(false);
-                    uiCountPressButton();
-                } else if(ar.length == 2) {
-                    clickCount02++;
-                    const el = document.getElementById("click-count-02");
-                    el.innerText = clickCount02;
+                // Added to handle tactile switches
+                if(ar.length == 2) {
+                    const field = document.getElementById("click-count");
+
+                    if(!isEditing) {
+                        isEditing = true;
+                        fieldText = fieldText + "あ";
+                    } else {
+                        colIndex = 0;
+                        rowIndex ++;
+                        if(rowIndex >= rowText.length) {
+                          rowIndex = 0;
+                        }
+                        fieldText = fieldText.substring(0, fieldText.length - 1) + rowText.substr(rowIndex, 1);
+                    }
+                    field.innerText = fieldText;
                 } else if(ar.length == 3) {
-                    clickCount03++;
-                    const el = document.getElementById("click-count-03");
-                    el.innerText = clickCount03;
+                    const field = document.getElementById("click-count");
+
+                    if(isEditing) {
+                        colIndex ++;
+                        if(colIndex >= colText[rowIndex].length) {
+                            colIndex = 0;
+                        }
+                        fieldText = fieldText.substring(0, fieldText.length - 1) + colText[rowIndex].substr(colIndex, 1);
+                        field.innerText = fieldText;
+                    }
                 } else if(ar.length == 4) {
-                    clickCount02 = 0;
-                    clickCount03 = 0;
-                    const el = document.getElementById("click-count-02");
-                    el.innerText = clickCount02;
-                    const el2 = document.getElementById("click-count-03");
-                    el2.innerText = clickCount03;
+                    rowIndex = 0;
+                    colIndex = 0;
+
+                    if(isEditing) {
+                        const field = document.getElementById("click-count");
+                        field.innerText = fieldText + "＿";
+                    } else {
+                        // Get profile of LINE user
+                        liff.getProfile().then(function (profile) {
+                            // Send message to talk room that liff opened on
+                            liff.sendMessages([
+                                {
+                                  type: 'text',
+                                  text: fieldText + '\n送信者：' + profile.displayName
+                                }
+                            ]).then(function () {
+                                fieldText = "";
+                                const field = document.getElementById("click-count");
+                                field.innerText = "＿";
+                            }).catch(function (error) {
+                                window.alert('Error sending message: ' + error.message);
+                            });
+                        }).catch(function (error) {
+                            window.alert("Error getting profile: " + error.message);
+                        });
+                    }
+
+                    isEditing = false;
                 }
             }
         });
