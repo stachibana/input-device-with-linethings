@@ -63,9 +63,9 @@ class writeCallback: public BLECharacteristicCallbacks {
 void setup() {
   Serial.begin(115200);
   
-  pinMode(LED1, OUTPUT);
-  pinMode(BUTTON, INPUT_PULLUP);
-  attachInterrupt(BUTTON, buttonAction, CHANGE);
+  //pinMode(LED1, OUTPUT);
+  //pinMode(BUTTON, INPUT_PULLUP);
+  //attachInterrupt(BUTTON, buttonAction, CHANGE);
 
   // Added
   pinMode(SWITCH1, INPUT);
