@@ -1,3 +1,7 @@
+# Original input device with [LINE Things](https://developers.line.biz/ja/docs/line-things/)
+
+Forked from [official starter](https://github.com/line/line-things-starter).
+
 # LINE Things Starter
 
 These are the sample codes for LINE Things Developer Trial.
