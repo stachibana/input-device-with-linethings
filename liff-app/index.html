@@ -2,6 +2,7 @@
 
   <head>
     <meta charset="UTF-8">
+    <title>Things Input Device</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <script src=" https://d.line-scdn.net/liff/1.0/sdk.js"></script>
     <script src="liff.js"></script>
@@ -9,11 +10,14 @@
   </head>
 
   <body>
+    <div class="container">
+      <!-- Content here -->
+    </div>
     <!-- Title -->
-    <h2>LINE Things Starter</h2>
+    <h2>Things Input Device</h2>
     <hr />
     <p>
-      <img id="loading-animation" class="" src="loading.gif" height="14px" />
+      <img id="loading-animation" class="" src="{{ url_for('static', filename='loading.gif') }}" height="14px" />
       <span id="status" class="inactive">Device disconnected</span>
     </p>
     <hr />
@@ -21,42 +25,17 @@
       <!-- Device Info Table -->
       <table class="device-info-table">
         <tr>
-          <th class="device-info-cell device-info-key">Name</th>
-          <td class="device-info-cell device-info-val" id="device-name"></td>
-        </tr>
-        <tr>
-          <th class="device-info-cell device-info-key">ID</th>
-          <td class="device-info-cell device-info-val" id="device-id"></td>
-        </tr>
-        <tr>
-          <th class="device-info-cell device-info-key">PSDI</th>
-          <td class="device-info-cell device-info-val" id="device-psdi"></td>
-        </tr>
-        <tr>
-          <th class="device-info-cell device-info-key">Button state</th>
-          <td class="device-info-cell device-info-val">
-            <button id="btn-state" class="btn btn-state" disabled>Released</button>
-          </td>
-        </tr>
-        <tr>
-          <th class="device-info-cell device-info-key">Click count 01</th>
-          <td class="device-info-cell device-info-val" id="click-count">0</td>
-        </tr>
-        <tr>
-          <th class="device-info-cell device-info-key">Click count 02 ?</th>
-          <td class="device-info-cell device-info-val" id="click-count-02">0</td>
-        </tr>
-        <tr>
-          <th class="device-info-cell device-info-key">Click count 03 ?</th>
-          <td class="device-info-cell device-info-val" id="click-count-03">0</td>
+          <th class="device-info-cell device-info-key">Text</th>
+          <td class="device-info-cell device-info-val" id="click-count">＿</td>
         </tr>
       </table>
       <hr />
-      <!-- Toggle LED -->
-      <p>
-        <button id="btn-led-toggle" class="btn btn-led-toggle" onclick="handlerToggleLed()">Switch LED ON</button>
-      </p>
-      <hr />
+      <ul style="text-align:left">
+        <li>左ボタンで「あ→か→さ」</li>
+        <li>真ん中ボタンで「あ→い→う」</li>
+        <li>右ボタンで確定</li>
+        <li>非入力時に右ボタンでメッセージ送信</li>
+      </ul>
     </div>
   </body>
 
