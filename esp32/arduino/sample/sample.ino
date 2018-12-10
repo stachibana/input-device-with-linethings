@@ -16,8 +16,9 @@
 #define PSDI_SERVICE_UUID "E625601E-9E55-4597-A598-76018A0D293D"
 #define PSDI_CHARACTERISTIC_UUID "26E2B12B-85F0-4F3F-9FDD-91D114270E6E"
 
-#define BUTTON 0
-#define LED1 2
+//#define BUTTON 0
+//#define LED1 2
+
 // Added 3 switches
 #define SWITCH1 4
 #define SWITCH2 5
@@ -35,7 +36,7 @@ BLECharacteristic* notifyCharacteristic;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
-volatile int btnAction = 0;
+//volatile int btnAction = 0;
 // Added
 volatile int swc1Action = 0;
 volatile int swc2Action = 0;
@@ -51,6 +52,7 @@ class serverCallbacks: public BLEServerCallbacks {
   }
 };
 
+/*
 class writeCallback: public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *bleWriteCharacteristic) {
     std::string value = bleWriteCharacteristic->getValue();
@@ -58,7 +60,7 @@ class writeCallback: public BLECharacteristicCallbacks {
       digitalWrite(LED1, (char)value[0]);
     }
   }
-};
+};*/
 
 void setup() {
   Serial.begin(115200);
@@ -157,10 +159,11 @@ void setupServices(void) {
   // Setup User Service
   userService = thingsServer->createService(USER_SERVICE_UUID);
   // Create Characteristics for User Service
+  /*
   writeCharacteristic = userService->createCharacteristic(WRITE_CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_WRITE);
   writeCharacteristic->setAccessPermissions(ESP_GATT_PERM_READ_ENCRYPTED | ESP_GATT_PERM_WRITE_ENCRYPTED);
   writeCharacteristic->setCallbacks(new writeCallback());
-
+  */
   notifyCharacteristic = userService->createCharacteristic(NOTIFY_CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_NOTIFY);
   notifyCharacteristic->setAccessPermissions(ESP_GATT_PERM_READ_ENCRYPTED | ESP_GATT_PERM_WRITE_ENCRYPTED);
   BLE2902* ble9202 = new BLE2902();
@@ -193,9 +196,10 @@ void startAdvertising(void) {
   thingsServer->getAdvertising()->start();
 }
 
+/*
 void buttonAction() {
   btnAction++;
-}
+} */
 
 // Added
 void switch1Action() {
