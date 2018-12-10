@@ -90,6 +90,7 @@ void setup() {
 }
 
 void loop() {
+  /*
   uint8_t btnValue;
   
   while (btnAction > 0 && deviceConnected) {
@@ -100,7 +101,7 @@ void loop() {
     notifyCharacteristic->setValue(&btnValue, 1);
     notifyCharacteristic->notify();
     delay(20);
-  }
+  }*/
 
   // Added
   uint8_t switch1Value;
